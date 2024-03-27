@@ -5,10 +5,10 @@ import tensorflow as tf
 from keras.models import Sequential
 from keras.layers import LSTM, Dense
 
-os.environ["CUDA_VISIBLE_DEVICES"] = '0'   #指定0号GPU可用
+# os.environ["CUDA_VISIBLE_DEVICES"] = '0'   #指定0号GPU可用
 
 # 读取华能水电.csv文件数据
-data = pd.read_csv('华能水电.csv')
+data = pd.read_csv('中国核电.csv')
 # 创建一个二维数组
 data = np.array(data)
 data = data[:, 3:]
@@ -35,7 +35,9 @@ def generate_data(data, time_step, predict_step):
     x = np.array(x)
     y = np.array(y)
     return x, y
-x,y = generate_data(data, 15,3)
+time_step = 15
+predict_step = 5
+x,y = generate_data(data, time_step=time_step, predict_step=predict_step)
 # print(x.shape)
 # print(y.shape)
 # print(data.shape)
@@ -45,13 +47,13 @@ x,y = generate_data(data, 15,3)
 
 
 model = Sequential()
-model.add(LSTM(units=10,input_shape=(x.shape[1], x.shape[2])))
+model.add(LSTM(units=10,input_shape=(x.shape[1], x.shape[2]),activation='relu'))
 model.add(Dense(y.shape[1],activation='sigmoid'))
 model.compile(loss='mean_squared_error', optimizer='adam')
 model.fit(x, y, epochs=1000, batch_size=10)
 
 # 保存模型
-model.save('model.h5')
+model.save('model.keras')
 # 保存处理好的数据
 np.save('base.npy', base)
 np.save('norm.npy', norm)

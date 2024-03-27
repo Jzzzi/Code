@@ -25,7 +25,7 @@ pro = ts.pro_api()
 while True:
     name = input('请输入股票名称：')
     code = stock_dict[name]
-    data = pro.daily(ts_code=code, start_date='20230101', end_date=yesterday)
+    data = pro.daily(ts_code=code, start_date='20230101', end_date=20240326)
     data = data[::-1]
     data.to_csv(name+'.csv')
     print(name + '数据下载成功！')
