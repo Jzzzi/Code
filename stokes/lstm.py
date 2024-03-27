@@ -1,7 +1,12 @@
+import os
 import pandas as pd
 import numpy as np
+import tensorflow as tf
 from keras.models import Sequential
 from keras.layers import LSTM, Dense
+
+os.environ["CUDA_VISIBLE_DEVICES"] = '0'   #指定0号GPU可用
+
 # 读取华能水电.csv文件数据
 data = pd.read_csv('华能水电.csv')
 # 创建一个二维数组
@@ -26,19 +31,19 @@ def generate_data(data, time_step, predict_step):
     y = []
     for i in range(data.shape[0]-time_step-predict_step):
         x.append(data[i:i+time_step,:])
-        y.append(data[i+time_step:i+time_step+predict_step,:4])
+        y.append(data[i+time_step+predict_step,:4])
     x = np.array(x)
     y = np.array(y)
-    # 将y的形状从3维变为2维
-    y = y.reshape((y.shape[0], y.shape[1]*y.shape[2]))
     return x, y
 x,y = generate_data(data, 15,3)
-print(x.shape)
-print(y.shape)
+# print(x.shape)
+# print(y.shape)
 # print(data.shape)
 # print(x.shape)
 
 # 创建LSTM模型
+
+
 model = Sequential()
 model.add(LSTM(units=10,input_shape=(x.shape[1], x.shape[2])))
 model.add(Dense(y.shape[1],activation='sigmoid'))
