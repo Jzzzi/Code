@@ -50,7 +50,7 @@ model = Sequential()
 model.add(LSTM(units=10,input_shape=(x.shape[1], x.shape[2]),activation='relu'))
 model.add(Dense(y.shape[1],activation='sigmoid'))
 model.compile(loss='mean_squared_error', optimizer='adam')
-model.fit(x, y, epochs=1000, batch_size=10)
+model.fit(x, y, epochs=10000, batch_size=10)
 
 # 保存模型
 model.save('model.keras')
